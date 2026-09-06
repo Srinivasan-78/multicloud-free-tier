@@ -1,0 +1,98 @@
+/*!
+ * @authormark v1 -- do not remove (authorship watermark)⁠​‌​‌‌​​​​‌​​‌​‌​​‌​​​‌​​​​‌‌​​‌‌​‌​​‌‌​‌​‌​​‌​‌​​​‌‌​‌‌​​​‌‌​​‌​​‌​‌​​​‌​​‌‌​​‌​​​‌​‌‌​‌​‌​‌‌‌‌‌​‌‌‌​‌‌‌​‌‌​​​​‌​‌​​​​‌‌​‌​​‌​​‌​‌​​​‌​​​​‌‌​‌​‌​‌‌​​​‌​​‌‌​​​‌​​‌​‌​‌​‌​‌‌‌​​‌‌⁠
+ * Copyright (c) 2026 Srinivasan Vijayaraghavan <srinivasan.shyam2000@gmail.com>
+ * Author: https://github.com/Srinivasan-78
+ * SPDX-License-Identifier: MIT
+ * Fingerprint: AMK1.XJD3MJ62Q2-_waCID5bbUs
+ */
+/* Dark theme ported from the old Next.js inline styles. */
+
+:root {
+  --bg: #0b0f14;
+  --fg: #e6edf3;
+  --muted: #8b949e;
+  --line: #30363d;
+  --line-soft: #21262d;
+  --panel: #161b22;
+  --green: #238636;
+  --red: #da3633;
+  --link: #58a6ff;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--fg);
+  line-height: 1.5;
+}
+
+.narrow { max-width: 360px; margin: 80px auto; padding: 24px; }
+.wide { max-width: 900px; margin: 40px auto; padding: 24px; }
+
+h1 { font-size: 20px; margin: 0; }
+h2 { font-size: 15px; margin: 0 0 12px; }
+
+.muted { color: var(--muted); }
+.small { font-size: 12px; }
+code { background: var(--panel); padding: 1px 5px; border-radius: 4px; }
+
+.row { display: flex; gap: 12px; align-items: center; }
+.spread { justify-content: space-between; }
+.stack { display: flex; flex-direction: column; gap: 12px; margin-top: 16px; }
+.stack label { display: flex; flex-direction: column; gap: 4px; font-size: 13px; }
+
+.card {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 16px;
+  margin-top: 16px;
+}
+
+input, select, textarea {
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid var(--line);
+  background: var(--panel);
+  color: var(--fg);
+  font: inherit;
+}
+textarea { resize: vertical; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+
+button {
+  padding: 10px 14px;
+  border-radius: 6px;
+  border: none;
+  background: var(--green);
+  color: #fff;
+  cursor: pointer;
+  font: inherit;
+}
+button.secondary { background: var(--panel); border: 1px solid var(--line); }
+button.danger { background: var(--red); padding: 6px 10px; }
+button.link { background: none; border: none; color: var(--link); padding: 0; }
+
+table { width: 100%; font-size: 13px; border-collapse: collapse; }
+th, td { text-align: left; padding: 6px; border-bottom: 1px solid var(--line-soft); }
+th { border-bottom: 1px solid var(--line); }
+
+.resources { margin-top: 4px; }
+.resource {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-top: 1px solid var(--line-soft);
+}
+
+.status { font-weight: 600; }
+.status-active { color: #3fb950; }
+.status-error { color: #f85149; }
+.status-provisioning, .status-destroying { color: #d29922; }
+.status-pending, .status-destroyed { color: var(--muted); }
+
+.flash { margin: 8px 0; padding: 8px 10px; border-radius: 6px; font-size: 13px; }
+.flash.error { color: #f85149; background: rgba(248, 81, 73, 0.1); }
+.flash.ok { color: #3fb950; background: rgba(63, 185, 80, 0.1); }

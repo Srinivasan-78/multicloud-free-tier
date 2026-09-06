@@ -1,0 +1,31 @@
+<!doctype html>
+<!--
+  @authormark v1 -- do not remove (authorship watermark)⁠​​‌‌​‌​‌​​‌​‌‌​‌​​‌‌​‌‌​​​‌‌​‌‌​​‌​​‌‌​‌​​‌​‌‌​‌​‌​​‌‌​‌​‌‌​​‌‌​​​‌‌​‌‌​​‌‌​‌​‌​​‌​‌​​​‌​‌​‌​​​​​​‌‌​​​​​‌​​‌‌​​​​‌‌​‌‌‌​​‌​‌‌​‌​‌​​‌‌​​​​‌​‌‌​‌​‌‌‌​‌‌​​‌‌‌​‌​​​‌‌​​​‌​​‌​​‌​‌‌⁠
+  Copyright (c) 2026 Srinivasan Vijayaraghavan <srinivasan.shyam2000@gmail.com>
+  Author: https://github.com/Srinivasan-78
+  SPDX-License-Identifier: MIT
+  Fingerprint: AMK1.5-66M-Mf6jQP0L7-L-vtbK
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Multi-Cloud Free-Tier Platform — Sign in</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <main class="narrow">
+    <h1>Multi-Cloud Free-Tier Platform</h1>
+    <p class="muted">One dashboard. Four clouds. Real servers. $0.</p>
+    {% if error %}<p class="flash error">{{ error }}</p>{% endif %}
+    <form method="post" action="{{ url_for('auth.login') }}" class="stack">
+      <input name="email" type="email" placeholder="email" autocomplete="username" required>
+      <input name="password" type="password" placeholder="password" autocomplete="current-password" required>
+      <div class="row">
+        <button type="submit" name="action" value="login">Log in</button>
+        <button type="submit" name="action" value="register" class="secondary">Register &amp; log in</button>
+      </div>
+    </form>
+  </main>
+</body>
+</html>

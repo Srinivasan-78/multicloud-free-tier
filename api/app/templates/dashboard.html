@@ -1,0 +1,92 @@
+<!doctype html>
+<!--
+  @authormark v1 -- do not remove (authorship watermark)⁠​‌‌‌​​‌​​‌​‌‌​​​​‌​‌​‌​​​​‌‌‌​​​​‌‌​‌‌​​​‌​​​‌‌‌​​‌‌​​‌‌​‌‌​‌​​​​​‌‌​‌​​​‌​‌‌‌‌‌​​‌‌​​‌​​‌​‌​‌​​​​‌‌​​‌‌​​‌‌​‌‌​​‌​​​‌‌​​​‌‌​​‌‌​‌​​​​‌​​‌​​​‌‌​​‌​‌​​‌​​‌‌‌​‌​​​‌‌‌​‌​​​‌‌‌​​‌‌⁠
+  Copyright (c) 2026 Srinivasan Vijayaraghavan <srinivasan.shyam2000@gmail.com>
+  Author: https://github.com/Srinivasan-78
+  SPDX-License-Identifier: MIT
+  Fingerprint: AMK1.rXT8lG3h4_2T36F3BFRtts
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Multi-Cloud Free-Tier Platform</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <main class="wide">
+    <header class="row spread">
+      <h1>Multi-Cloud Free-Tier Platform</h1>
+      <form method="post" action="{{ url_for('auth.logout') }}">
+        <button type="submit" class="link">Log out ({{ email }})</button>
+      </form>
+    </header>
+
+    {% for category, message in get_flashed_messages(with_categories=true) %}
+      <p class="flash {{ category }}">{{ message }}</p>
+    {% endfor %}
+
+    <section class="card">
+      <h2>Cloud credentials</h2>
+      <p class="muted">Stored Fernet-encrypted. Only the provisioner decrypts them, at run time.</p>
+      <form method="post" action="{{ url_for('credentials.store') }}" class="stack">
+        <label>Provider
+          <select name="provider">
+            {% for p in providers %}
+              <option value="{{ p }}">{{ p }}{% if p in configured %} — configured{% endif %}</option>
+            {% endfor %}
+          </select>
+        </label>
+        <label>Payload (JSON object)
+          <textarea name="payload" rows="4"
+            placeholder='{"aws_access_key_id": "AKIA...", "aws_secret_access_key": "..."}'></textarea>
+        </label>
+        <button type="submit">Save credentials</button>
+      </form>
+    </section>
+
+    <section class="card">
+      <h2>Provision <span class="muted">(free-tier only, server-enforced)</span></h2>
+      <form method="post" action="{{ url_for('resources.create_resource') }}" class="row">
+        <input type="hidden" name="resource_type" value="compute">
+        <select name="provider">
+          {% for p, meta in catalog.items() %}
+            <option value="{{ p }}"{% if not meta.implemented %} disabled{% endif %}>
+              {{ p }}{% if not meta.implemented %} (module not built yet){% endif %}
+            </option>
+          {% endfor %}
+        </select>
+        <button type="submit">Spin up compute</button>
+      </form>
+      <p class="muted small">
+        Locked specs come from <code>free_tier.py</code>; the request only carries the provider label.
+      </p>
+    </section>
+
+    <section class="card">
+      <h2>Theoretical cost <span class="muted">(actual spend: $0 on free tier)</span></h2>
+      <table>
+        <thead>
+          <tr><th>Provider</th><th>Instance</th><th>$/hr</th><th>$/mo if paid</th></tr>
+        </thead>
+        <tbody>
+          {% for e in estimates %}
+            <tr>
+              <td>{{ e.provider }}</td>
+              <td>{{ e.instance_label }}</td>
+              <td>${{ e.hourly_usd }}</td>
+              <td>${{ e.monthly_usd_if_paid }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </section>
+
+    <section class="card">
+      <h2>Your resources</h2>
+      {% include "_resources.html" %}
+    </section>
+  </main>
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>

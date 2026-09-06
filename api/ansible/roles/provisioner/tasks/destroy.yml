@@ -1,0 +1,99 @@
+# @authormark v1 -- do not remove (authorship watermark)⁠​‌‌​​​‌​​‌​‌​‌‌​​‌​‌‌​‌​​​‌‌​‌‌​​‌‌‌​‌‌‌​‌​‌​​​‌​‌‌​​‌‌​​​‌‌​‌​‌​‌​‌​​‌‌​‌‌‌​​‌‌​‌​​‌​‌​​‌‌​‌​‌​​​‌​‌‌​‌​‌‌​‌‌‌​​‌​‌​​‌​​​‌‌‌​​​​‌​​‌‌​‌​‌‌​​‌​‌​‌‌‌​‌‌‌​‌‌​​‌​‌​‌​​‌‌‌​​‌​​‌​​​⁠
+# Copyright (c) 2026 Srinivasan Vijayaraghavan <srinivasan.shyam2000@gmail.com>
+# Author: https://github.com/Srinivasan-78
+# SPDX-License-Identifier: MIT
+# Fingerprint: AMK1.bVZ6wQf5SsJj-nR8MeweNH
+---
+# claim -> (if state exists) terraform destroy -> mark destroyed.
+# Same rescue -> 'error' auto-rollback as provision.
+
+- name: Claim - mark destroying
+  ansible.builtin.command:
+    argv: [python3, "{{ bin_dir }}/db.py", set-status, "{{ resource_id }}", destroying]
+  changed_when: true
+
+- name: Destroy
+  block:
+    - name: Load job
+      ansible.builtin.command:
+        argv: [python3, "{{ bin_dir }}/db.py", get-job, "{{ resource_id }}"]
+      register: job_raw
+      changed_when: false
+
+    - name: Parse job
+      ansible.builtin.set_fact:
+        job: "{{ job_raw.stdout | from_json }}"
+
+    - name: Resolve workspace path
+      ansible.builtin.set_fact:
+        workspace: "{{ terraform_root }}/tenants/{{ job.user_id }}/{{ job.provider }}"
+
+    - name: Look for existing terraform state
+      ansible.builtin.stat:
+        path: "{{ workspace }}/terraform.tfstate"
+      register: tfstate
+
+    - name: terraform destroy (only if something was provisioned)
+      when: tfstate.stat.exists
+      block:
+        - name: Credentials must exist to destroy
+          ansible.builtin.assert:
+            that: job.encrypted_payload | default('', true) | length > 0
+            fail_msg: "no stored credentials for provider '{{ job.provider }}'"
+
+        - name: Decrypt credential blob
+          ansible.builtin.command:
+            argv: [python3, "{{ bin_dir }}/crypto.py", decrypt]
+            stdin: "{{ job.encrypted_payload }}"
+          register: cred_raw
+          changed_when: false
+          no_log: true
+
+        - name: Re-render tfvars (spec + credentials)
+          ansible.builtin.copy:
+            content: "{{ (job.spec | combine(cred_raw.stdout | from_json)) | to_nice_json }}"
+            dest: "{{ workspace }}/terraform.tfvars.json"
+            mode: "0600"
+          no_log: true
+
+        - name: terraform destroy
+          ansible.builtin.command:
+            cmd: terraform destroy -auto-approve -input=false -no-color
+            chdir: "{{ workspace }}"
+          register: tf_destroy
+          changed_when: "'Destroy complete' in tf_destroy.stdout"
+          retries: 5
+          delay: 2
+          until: tf_destroy.rc == 0
+
+    - name: Mark destroyed
+      ansible.builtin.command:
+        argv: [python3, "{{ bin_dir }}/db.py", set-status, "{{ resource_id }}", destroyed]
+      changed_when: true
+
+    - name: "Event: destroy.succeeded"
+      ansible.builtin.debug:
+        msg: >-
+          {{ {'event': 'destroy.succeeded', 'resource_id': resource_id} | to_json }}
+
+  rescue:
+    - name: "Event: destroy.failed"
+      ansible.builtin.debug:
+        msg: >-
+          {{ {'event': 'destroy.failed', 'resource_id': resource_id,
+              'error': (ansible_failed_result.msg | default('unknown') | string)} | to_json }}
+
+    - name: Roll the row back to error
+      ansible.builtin.command:
+        argv:
+          - python3
+          - "{{ bin_dir }}/db.py"
+          - set-status
+          - "{{ resource_id }}"
+          - error
+          - "{{ ansible_failed_result.msg | default('destroy failed') | string | truncate(1800, true, '') }}"
+      changed_when: true
+
+    - name: Re-raise so the worker records a failure
+      ansible.builtin.fail:
+        msg: "destroy failed for {{ resource_id }}"

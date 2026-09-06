@@ -1,0 +1,13 @@
+# @authormark v1 -- do not remove (authorship watermark)⁠​‌​‌​​‌​​‌​​​‌​‌​‌‌‌​‌‌‌​‌‌​​​‌​​‌‌​‌​‌​​‌‌​‌‌‌​​‌​​​‌‌‌​‌‌‌​‌​‌​​‌‌​‌‌‌​‌​​‌​​​​‌​‌‌‌‌‌​‌‌‌​​‌​​​‌‌​​‌​​​‌‌‌​​​​​‌‌​‌‌‌​‌​​‌‌​‌​‌‌​‌​‌‌​‌​‌​‌‌‌​​‌‌​‌‌​​‌‌​‌​​​​‌​​​​‌​​‌‌​‌‌​‌⁠
+# Copyright (c) 2026 Srinivasan Vijayaraghavan <srinivasan.shyam2000@gmail.com>
+# Author: https://github.com/Srinivasan-78
+# SPDX-License-Identifier: MIT
+# Fingerprint: AMK1.REwbjnGu7H_r287MkW6hBm
+---
+# Environment-agnostic knobs. Overridable with -e, but the defaults match the
+# container (terraform + tenant workspaces mounted at /terraform).
+terraform_root: "{{ lookup('env', 'TERRAFORM_ROOT') | default('/terraform', true) }}"
+auto_destroy_hours: "{{ lookup('env', 'AUTO_DESTROY_HOURS') | default('24', true) }}"
+
+# bin/ helpers, resolved from this role: roles/provisioner -> ../../../bin
+bin_dir: "{{ role_path }}/../../../bin"
