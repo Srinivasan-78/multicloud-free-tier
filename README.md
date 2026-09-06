@@ -441,7 +441,6 @@ api/
     static/              style.css, app.js (the 5s poll)
   db/
     schema.sql           idempotent bootstrap, applied on web start
-    migrations/0001_init.sql
   bin/
     entrypoint.sh        web: wait for pg, apply schema, exec flask
     wait-for-pg.sh       worker/sweeper: wait for pg, exec
