@@ -3,7 +3,6 @@
 # Author: https://github.com/Srinivasan-78
 # SPDX-License-Identifier: MIT
 # Fingerprint: AMK1.YNoWwVBepGVIwuFN2YGfvm
-version: "3.9"
 services:
   postgres:
     image: postgres:16

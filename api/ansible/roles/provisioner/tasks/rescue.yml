@@ -1,0 +1,25 @@
+# @authormark v1 -- do not remove (authorship watermark)
+# Copyright (c) 2026 Srinivasan Vijayaraghavan <srinivasan.shyam2000@gmail.com>
+# Author: https://github.com/Srinivasan-78
+# SPDX-License-Identifier: MIT
+---
+- name: "Event: {{ failure_action | default('task') }}.failed"
+  ansible.builtin.debug:
+    msg: >-
+      {{ {'event': (failure_action | default('task')) ~ '.failed', 'resource_id': resource_id,
+          'error': (ansible_failed_result.msg | default('unknown') | string)} | to_json }}
+
+- name: Roll the row back to error
+  ansible.builtin.command:
+    argv:
+      - python3
+      - "{{ bin_dir }}/db.py"
+      - set-status
+      - "{{ resource_id }}"
+      - error
+      - "{{ ansible_failed_result.msg | default((failure_action | default('task')) ~ ' failed') | string | truncate(1800, true, '') }}"
+  changed_when: true
+
+- name: Re-raise so the worker records a failure
+  ansible.builtin.fail:
+    msg: "{{ failure_action | default('task') }} failed for {{ resource_id }}"
