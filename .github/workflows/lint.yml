@@ -1,0 +1,27 @@
+# @authormark v1 -- do not remove (authorship watermark)⁠​​‌‌​‌‌​​‌‌​‌​‌‌​‌‌‌​‌‌​​​‌‌​‌​​​‌​​‌​​‌​​‌‌​‌‌​​‌​​‌‌​​​‌‌‌​​‌‌​‌‌‌​​​‌​‌​​​​​‌​​‌​‌‌​‌​‌‌‌‌​​​​‌‌‌‌​​​​‌​‌‌​​‌​‌​‌​‌​​​‌‌​‌‌‌​​‌‌‌​​‌​​‌​​​‌‌​​‌​​‌‌‌​​‌‌‌​‌‌‌​​‌‌​​‌‌​‌​​‌​‌‌⁠
+# Copyright (c) 2026 Srinivasan Vijayaraghavan <srinivasan.shyam2000@gmail.com>
+# Author: https://github.com/Srinivasan-78
+# SPDX-License-Identifier: MIT
+# Fingerprint: AMK1.6kv4I6LsqA-xxYTnrFNw3K
+name: lint
+on:
+  pull_request:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4
+
+      - name: ruff (Flask app)
+        run: pipx run ruff@0.5.7 check api
+
+      - name: shellcheck (bin scripts)
+        run: shellcheck api/bin/*.sh
+
+      - name: ansible-lint (playbooks, advisory)
+        run: pipx run ansible-lint@24.7.0 api/ansible || echo "ansible-lint reported issues (non-blocking)"
