@@ -77,23 +77,7 @@
           {{ {'event': 'destroy.succeeded', 'resource_id': resource_id} | to_json }}
 
   rescue:
-    - name: "Event: destroy.failed"
-      ansible.builtin.debug:
-        msg: >-
-          {{ {'event': 'destroy.failed', 'resource_id': resource_id,
-              'error': (ansible_failed_result.msg | default('unknown') | string)} | to_json }}
-
-    - name: Roll the row back to error
-      ansible.builtin.command:
-        argv:
-          - python3
-          - "{{ bin_dir }}/db.py"
-          - set-status
-          - "{{ resource_id }}"
-          - error
-          - "{{ ansible_failed_result.msg | default('destroy failed') | string | truncate(1800, true, '') }}"
-      changed_when: true
-
-    - name: Re-raise so the worker records a failure
-      ansible.builtin.fail:
-        msg: "destroy failed for {{ resource_id }}"
+    - name: Handle destroy failure
+      ansible.builtin.include_tasks: rescue.yml
+      vars:
+        failure_action: destroy

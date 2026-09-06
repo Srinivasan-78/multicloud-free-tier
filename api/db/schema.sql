@@ -53,12 +53,3 @@ CREATE INDEX IF NOT EXISTS resources_user_idx
 CREATE INDEX IF NOT EXISTS resources_claimable_idx
     ON resources (created_at)
     WHERE claimed_at IS NULL AND status IN ('pending', 'destroying');
-
-CREATE TABLE IF NOT EXISTS usage_log (
-    id                   uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-    resource_id          uuid NOT NULL REFERENCES resources (id) ON DELETE CASCADE,
-    provider             text NOT NULL,
-    hours_active         numeric,
-    theoretical_cost_usd numeric,
-    logged_at            timestamptz NOT NULL DEFAULT now()
-);
