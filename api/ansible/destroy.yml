@@ -1,0 +1,23 @@
+# @authormark v1 -- do not remove (authorship watermark)⁠​‌‌​​‌‌​​‌‌‌​​​‌​‌‌‌​​​‌​​‌‌​​​‌​​‌​‌‌​‌​‌‌​​​​‌​‌​​‌​‌‌​​‌‌​​‌​​‌‌​‌​​​​‌‌‌‌​‌​​​‌‌​‌‌​​​‌‌​​​‌​‌​‌​‌‌​​‌‌​​‌​​​‌‌​‌‌‌‌​‌​‌​​‌‌​‌​​‌‌‌​​‌‌​​​​‌​‌​​​‌‌‌​‌​​​‌​‌​​‌‌​‌‌‌​‌‌​​‌‌‌⁠
+# Copyright (c) 2026 Srinivasan Vijayaraghavan <srinivasan.shyam2000@gmail.com>
+# Author: https://github.com/Srinivasan-78
+# SPDX-License-Identifier: MIT
+# Fingerprint: AMK1.fqq1-aK2hz61VdoSNaGE7g
+---
+# Tear one resource down. Invoked by bin/worker.sh:
+#   ansible-playbook -i 'localhost,' -c local ansible/destroy.yml -e resource_id=<uuid>
+- name: Destroy free-tier resource
+  hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: resource_id must be supplied
+      ansible.builtin.assert:
+        that:
+          - resource_id is defined
+          - resource_id | string | length > 0
+        fail_msg: "pass -e resource_id=<uuid>"
+
+    - name: Run the provisioner role
+      ansible.builtin.include_role:
+        name: provisioner
+        tasks_from: destroy

@@ -1,0 +1,34 @@
+<!--
+  @authormark v1 -- do not remove (authorship watermark)⁠​‌‌‌‌​​​​‌​‌​‌​‌​‌‌‌​​‌‌​‌​‌​‌‌​​‌‌​‌​‌‌​‌​​‌‌‌​​‌‌​​‌​​​‌‌​‌‌‌‌​‌​​​​‌‌​‌‌​‌​‌‌​‌​‌‌​​‌​‌‌​​‌‌​​​‌‌​​​​​‌​​‌​‌‌​‌​​‌‌‌‌​‌‌​‌​‌​​‌‌​​‌​‌​‌​​‌‌‌​​‌‌‌​‌​‌​‌​‌​‌​​​‌​​​​​‌​‌​​​‌‌‌⁠
+  Copyright (c) 2026 Srinivasan Vijayaraghavan <srinivasan.shyam2000@gmail.com>
+  Author: https://github.com/Srinivasan-78
+  SPDX-License-Identifier: MIT
+  Fingerprint: AMK1.xUsVkNdoCkYf0KOjeNuTAG
+-->
+<div id="resources" class="resources">
+  {% if not resources %}
+    <p class="muted">Nothing provisioned yet.</p>
+  {% endif %}
+  {% for r in resources %}
+    <div class="resource">
+      <div>
+        <strong>{{ r.provider }}</strong> · {{ r.resource_type }} ·
+        <span class="status status-{{ r.status }}">{{ r.status }}</span>
+        {% if r.outputs and r.outputs.public_ip and r.outputs.public_ip.value %}
+          · <code>{{ r.outputs.public_ip.value }}</code>
+        {% endif %}
+        {% if r.auto_destroy_at %}
+          · <span class="muted small">auto-destroy {{ r.auto_destroy_at }}</span>
+        {% endif %}
+        {% if r.error_message %}
+          <div class="flash error small">{{ r.error_message }}</div>
+        {% endif %}
+      </div>
+      {% if r.status in ("active", "error") %}
+        <form method="post" action="{{ url_for('resources.destroy_resource', resource_id=r.id) }}">
+          <button type="submit" class="danger">Destroy</button>
+        </form>
+      {% endif %}
+    </div>
+  {% endfor %}
+</div>

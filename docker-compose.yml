@@ -1,8 +1,8 @@
-# @authormark v1 -- do not remove (authorship watermark)⁠​‌‌​​‌‌‌​‌​‌‌​​​​‌​‌‌​​​​‌​​​‌‌‌​‌‌‌​‌‌‌​‌​​​​‌‌​​‌‌‌​​​​‌‌​‌‌‌​​‌‌​‌​‌​​‌‌‌​‌​​​‌‌​‌​​‌​‌​‌​​​​​‌​‌​​‌‌​‌​​‌​‌​​‌​​​​​‌​‌‌​‌‌​‌​​‌‌​‌‌‌​‌​​‌​​​​​‌‌​​‌‌​‌‌‌​‌​​​‌‌​‌​​‌​‌‌​‌‌​‌⁠
+# @authormark v1 -- do not remove (authorship watermark)⁠​‌​‌‌​​‌​‌​​‌‌‌​​‌‌​‌‌‌‌​‌​‌​‌‌‌​‌‌‌​‌‌‌​‌​‌​‌‌​​‌​​​​‌​​‌‌​​‌​‌​‌‌‌​​​​​‌​​​‌‌‌​‌​‌​‌‌​​‌​​‌​​‌​‌‌‌​‌‌‌​‌‌‌​‌​‌​‌​​​‌‌​​‌​​‌‌‌​​​‌‌​​‌​​‌​‌‌​​‌​‌​​​‌‌‌​‌‌​​‌‌​​‌‌‌​‌‌​​‌‌​‌‌​‌⁠
 # Copyright (c) 2026 Srinivasan Vijayaraghavan <srinivasan.shyam2000@gmail.com>
 # Author: https://github.com/Srinivasan-78
 # SPDX-License-Identifier: MIT
-# Fingerprint: AMK1.gXXGwC8njtiPSJAm7H3tim
+# Fingerprint: AMK1.YNoWwVBepGVIwuFN2YGfvm
 version: "3.9"
 services:
   postgres:
@@ -16,17 +16,12 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
 
-  redis:
-    image: redis:7
-    ports:
-      - "6379:6379"
-
-  api:
+  web:
     build: ./api
+    command: ["bash", "bin/entrypoint.sh", "flask", "--app", "app:create_app", "run", "--host", "0.0.0.0", "--port", "8000", "--reload"]
     env_file: ./api/.env
     depends_on:
       - postgres
-      - redis
     ports:
       - "8000:8000"
     volumes:
@@ -35,22 +30,20 @@ services:
 
   worker:
     build: ./api
-    command: celery -A app.core.celery_app worker --loglevel=info
+    command: ["bash", "bin/wait-for-pg.sh", "bash", "bin/worker.sh"]
     env_file: ./api/.env
     depends_on:
       - postgres
-      - redis
     volumes:
       - ./api:/app
       - ./terraform:/terraform
 
-  beat:
+  sweeper:
     build: ./api
-    command: celery -A app.core.celery_app beat --loglevel=info
+    command: ["bash", "bin/wait-for-pg.sh", "bash", "bin/sweeper.sh"]
     env_file: ./api/.env
     depends_on:
       - postgres
-      - redis
     volumes:
       - ./api:/app
       - ./terraform:/terraform

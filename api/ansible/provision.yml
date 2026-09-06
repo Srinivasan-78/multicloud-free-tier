@@ -1,0 +1,27 @@
+# @authormark v1 -- do not remove (authorship watermark)⁠​‌​‌​‌‌​​‌‌​​‌​​​‌‌​‌‌​‌​‌‌​​‌‌​​‌​‌​‌​‌​‌‌​‌‌​​​‌​‌​‌​‌​‌​​​‌‌​​‌‌​​​‌‌​‌​​‌‌‌‌​‌‌​​‌‌​​‌‌​‌‌‌​​‌​​‌​‌​​‌‌​​​‌‌​‌‌‌​‌‌​​‌​‌​‌​​​‌​​​‌‌​​‌​​‌​‌‌​‌‌‌​​​‌​‌​‌​​‌‌​‌​‌​‌​​​‌​​‌‌‌​⁠
+# Copyright (c) 2026 Srinivasan Vijayaraghavan <srinivasan.shyam2000@gmail.com>
+# Author: https://github.com/Srinivasan-78
+# SPDX-License-Identifier: MIT
+# Fingerprint: AMK1.VdmfUlUFcOfnJcvTFKqSTN
+---
+# Provision one free-tier resource. Invoked by bin/worker.sh:
+#   ansible-playbook -i 'localhost,' -c local ansible/provision.yml -e resource_id=<uuid>
+#
+# DATABASE_URL / FERNET_KEY / TERRAFORM_ROOT / AUTO_DESTROY_HOURS come from the
+# container environment (env_file: ./api/.env) and are inherited by the local
+# command tasks.
+- name: Provision free-tier resource
+  hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: resource_id must be supplied
+      ansible.builtin.assert:
+        that:
+          - resource_id is defined
+          - resource_id | string | length > 0
+        fail_msg: "pass -e resource_id=<uuid>"
+
+    - name: Run the provisioner role
+      ansible.builtin.include_role:
+        name: provisioner
+        tasks_from: provision
