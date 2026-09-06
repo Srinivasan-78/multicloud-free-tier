@@ -3,7 +3,7 @@
 # Author: https://github.com/Srinivasan-78
 # SPDX-License-Identifier: MIT
 # Fingerprint: AMK1.1-Klw-XuD7EoaRb6ipdKDJ
-FROM python:3.12-slim
+FROM python:3.14-slim
 
 ARG TERRAFORM_VERSION=1.9.0
 
