@@ -1,8 +1,8 @@
-# @authormark v1 -- do not remove (authorship watermark)⁠​‌‌​​​‌​​‌​‌​‌‌​​‌​‌‌​‌​​​‌‌​‌‌​​‌‌‌​‌‌‌​‌​‌​​​‌​‌‌​​‌‌​​​‌‌​‌​‌​‌​‌​​‌‌​‌‌‌​​‌‌​‌​​‌​‌​​‌‌​‌​‌​​​‌​‌‌​‌​‌‌​‌‌‌​​‌​‌​​‌​​​‌‌‌​​​​‌​​‌‌​‌​‌‌​​‌​‌​‌‌‌​‌‌‌​‌‌​​‌​‌​‌​​‌‌‌​​‌​​‌​​​⁠
+# @authormark v1 -- do not remove (authorship watermark)⁠​‌​‌​​‌‌​‌​‌​​‌​​‌​​​​​‌​‌‌‌‌​‌​​‌​​‌​‌​​‌​​‌‌​​​‌‌​​‌​‌​‌‌​‌‌‌​​​‌‌​‌‌‌​‌‌‌​‌‌‌​‌​​​‌​​​​‌‌‌​​‌​‌​‌‌​‌​​​‌‌​​​​​​‌‌​​​‌​‌​‌​​‌‌​‌​​​‌​​​‌​‌​‌‌​​​‌​‌‌​‌​‌‌​​​‌‌​‌‌​‌​‌‌​‌​​‌​‌‌⁠
 # Copyright (c) 2026 Srinivasan Vijayaraghavan <srinivasan.shyam2000@gmail.com>
 # Author: https://github.com/Srinivasan-78
 # SPDX-License-Identifier: MIT
-# Fingerprint: AMK1.bVZ6wQf5SsJj-nR8MeweNH
+# Fingerprint: AMK1.SRAzJLen7wD9Z01SDV-ckK
 ---
 # claim -> (if state exists) terraform destroy -> mark destroyed.
 # Same rescue -> 'error' auto-rollback as provision.
