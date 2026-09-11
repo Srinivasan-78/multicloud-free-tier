@@ -1,8 +1,8 @@
--- @authormark v1 -- do not remove (authorship watermark)⁠​‌‌‌‌​​​​‌‌​​‌​​​​‌‌​​‌‌​‌‌‌‌​​​​​‌‌‌​​‌​​‌‌​‌‌‌​‌‌​​​‌‌​‌​‌‌‌‌‌​‌‌​​​​‌​‌‌‌​‌​‌​‌​​​​‌‌​​‌‌​‌‌‌​‌‌​​​‌​​‌​‌‌​​​​​‌‌​‌‌‌​‌‌‌​‌​​​‌‌​‌​​‌​‌‌‌​‌​‌​‌‌​‌‌‌​​‌​​​‌​‌​‌‌​‌‌​‌​​‌‌​​‌​⁠
+-- @authormark v1 -- do not remove (authorship watermark)⁠​‌​​‌​​​​​‌‌‌​​​​‌‌​‌​​​​​‌‌​‌‌‌​‌‌‌​​​‌​‌​​‌​‌​​‌​​‌‌‌‌​‌‌​​​‌‌​‌‌​​​​‌​‌​​​​​‌​‌​‌‌​​​​‌‌‌​​‌‌​‌​​​‌​​​​‌​‌‌​‌​‌‌​​​‌​​‌​‌​‌​‌​‌‌​​​​‌​‌‌​​‌‌‌​‌​​​‌‌​​‌​‌​​‌‌​‌‌​‌‌‌‌​‌​‌​‌​​⁠
 -- Copyright (c) 2026 Srinivasan Vijayaraghavan <srinivasan.shyam2000@gmail.com>
 -- Author: https://github.com/Srinivasan-78
 -- SPDX-License-Identifier: MIT
--- Fingerprint: AMK1.xd3x97c_auC7bX7tiunEm2
+-- Fingerprint: AMK1.H8h7qJOcaAXsD-bUagFSoT
 -- Idempotent bootstrap schema. Applied on every container start by
 -- bin/entrypoint.sh (safe to re-run). db/migrations/ keeps the numbered trail.
 --

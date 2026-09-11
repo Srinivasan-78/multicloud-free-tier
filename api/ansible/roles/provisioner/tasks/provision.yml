@@ -1,8 +1,8 @@
-# @authormark v1 -- do not remove (authorship watermark)⁠​‌‌‌​​​​​​‌‌​​​‌​‌​​​​‌​​‌‌‌​​​​​‌‌‌​​​‌​‌‌​‌‌​‌​‌‌​​​​‌​‌​​‌​‌​​‌​​​‌​‌​‌‌​​‌‌‌​​‌‌​​‌‌​‌​‌‌‌‌‌​​‌‌​​​​​‌‌‌​‌‌‌​‌​‌​​​​​‌​‌​​‌​​‌‌​​‌​​​‌​​‌​‌​​‌‌​​‌​​​‌‌‌​​​​​‌​‌‌​​​​‌​‌​​‌‌⁠
+# @authormark v1 -- do not remove (authorship watermark)⁠​‌​‌​‌​​​‌​‌​​‌​​‌​‌​‌​​​‌‌‌​​‌​​​‌​‌‌​‌​‌​‌​​​​​‌‌‌​​​​​‌‌‌‌​‌​​​‌‌​‌​‌​‌‌​‌​‌‌​‌​‌​‌​​​‌‌‌‌​‌​​‌​​​‌‌​​‌‌​​​‌‌​​‌‌​​‌‌​​‌‌​‌‌​​​‌​‌‌​‌​‌​‌‌‌‌‌​‌‌​‌​​‌​‌​‌‌​​​​‌​‌​‌​‌​‌​​​‌​​⁠
 # Copyright (c) 2026 Srinivasan Vijayaraghavan <srinivasan.shyam2000@gmail.com>
 # Author: https://github.com/Srinivasan-78
 # SPDX-License-Identifier: MIT
-# Fingerprint: AMK1.p1BpqmaJEg3_0wPRdJdpXS
+# Fingerprint: AMK1.TRTr-Ppz5kTzFc36-_iXUD
 ---
 # claim -> fetch job -> decrypt creds -> terraform apply -> mark active.
 # The rescue block rolls the row back to 'error' on any failure (auto-rollback),
